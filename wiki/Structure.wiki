@@ -16,3 +16,6 @@ a la lecture du finsi on relie le sommet ou l'on est au suivant et celui du tabl
 a la lecture d'un tant que : on stocke le sommet
 
 arrivé au fintantque : on relie de l'actuel vers le stocké on repart du stocké et on créé un nouvel etat
+
+
+On aurai pu se passer du numero de sommet en considerant uniquement leur place dans la liste.
