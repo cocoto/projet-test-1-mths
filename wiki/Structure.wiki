@@ -11,3 +11,8 @@ a la lecture du si on stocke le sommet
 - si lecture d'un sinon on remplace le sommet par celui ou l'on etait
 
 a la lecture du finsi on relie le sommet ou l'on est au suivant et celui du tableau au suivant aussi.
+
+
+a la lecture d'un tant que : on stocke le sommet
+
+arrivé au fintantque : on relie de l'actuel vers le stocké on repart du stocké et on créé un nouvel etat
