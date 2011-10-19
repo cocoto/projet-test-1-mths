@@ -1,0 +1,32 @@
+ecrire("entrez un nombre");
+n := lire(input);
+Si n<=2
+Alors
+ecrire("false");
+Sinon
+m:= n-1;
+p:= 1;
+Tantque (m>=2)&&(p==1)
+Faire
+i:= n;
+j:= m;
+Tantque i!=j
+Faire
+Si i<j
+Alors
+j := j-i;
+Sinon
+i:= i-j;
+Fsi
+Fintantque
+Si i!=1
+Alors p:=0;
+m := m-1;
+Fintanque 
+Si p==1
+Alors
+ecrire("premier");
+Sinon
+ecrire("pas premier");
+Fsi
+Fsi
