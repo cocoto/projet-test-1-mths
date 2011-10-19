@@ -17,8 +17,8 @@ struct cellule_sommet {
 	cellule_sommet* suivant;
 };
 struct liste_sommet {
-	cellule_sommet depart;
-	cellule_sommet fin;
+	cellule_sommet* depart;
+	cellule_sommet* fin;
 	int taille;		//implémentable ou non, au choix
 };
 
