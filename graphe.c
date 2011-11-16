@@ -55,10 +55,39 @@ cellule_sommet* recherche_sommet(int sommet,liste_sommet* liste)
 
 void ajouter_arete (char* etiquette, int sommet_d, int sommet_c, liste_sommet* liste) //sommet départ et sommet cible
 {
-	ajouter_arrete_l(etiquette, recherche_sommet(sommet_d,liste), sommet_c);
+	ajouter_arete_l(etiquette, recherche_sommet(sommet_d,liste), sommet_c);
 }
 
-void affiche()
+void affiche(liste_sommet* liste)
 {
+    cellule_sommet *parcours=liste->depart;
+    while (parcours!=NULL){
+        cellule_arete *reparcours=parcours->liste_arete;
+        int dep= parcours->numero;
+        while (reparcours!=NULL){
+            printf("%d -- %s --> %d", dep , reparcours->etiquette , reparcours->arrive);
+            reparcours=reparcours->suivante;
+        }
+        parcours=parcours->suivant;
+    }
 	printf("ZBOOOOOOOB");
+}
+
+
+void main(){
+    liste_sommet* encule;
+    encule->depart=NULL;
+
+    ajouter_sommet(1,encule ,"");
+    ajouter_sommet(2,encule,"");
+    ajouter_sommet(3,encule,"");
+    ajouter_sommet(4,encule,"");
+    ajouter_sommet(5,encule,"");
+    ajouter_arete("je",1,2,encule);
+    ajouter_arete("suis",2,3,encule);
+    ajouter_arete("un",3,4,encule);
+    ajouter_arete("connard",4,5,encule);
+    ajouter_arete("assis a cote d'",3,5,encule);
+    affiche(encule);
+
 }

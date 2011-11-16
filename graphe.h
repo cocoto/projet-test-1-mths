@@ -34,4 +34,4 @@ void ajouter_arete_l(char* etiquette, cellule_sommet* sommet, int numero);
 cellule_sommet* recherche_sommet(int sommet,liste_sommet* liste);
 
 void ajouter_arete (char* etiquette, int sommet_d, int sommet_c, liste_sommet* liste); //sommet départ et sommet cible
-void affiche();
+void affiche(liste_sommet* liste);
