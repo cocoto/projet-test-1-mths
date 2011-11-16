@@ -9,12 +9,13 @@ typedef struct liste_sommet liste_sommet;
 struct cellule_arete{
 	int arrive;		//Sommet d'arrivée
 	cellule_arete* suivante;
-	char* etiquette[];	//Identificateur de l'arrête
+	char* etiquette;	//Identificateur de l'arrête
 };
 struct cellule_sommet {
 	int numero;		//Identifiant du commet
 	cellule_arete* liste_arete;
 	cellule_sommet* suivant;
+	char* etiquette;	//Utilisé uniquement pour les conditionnelles
 };
 struct liste_sommet {
 	cellule_sommet* depart;
@@ -23,13 +24,14 @@ struct liste_sommet {
 };
 
 // Ajoute un sommet à la fin de la liste donnée, avec le numéro donné
-void ajouter_sommet(int numero, liste_sommet* liste);
+void ajouter_sommet(int numero, liste_sommet* liste, char* etiquette);
 
 // Ajoute une arete au début de la liste donnée
 void ajouter_arete_l(char* etiquette, cellule_sommet* sommet, int numero);
 
 // Algorithme de recherche d'une liste
 //Précondition : La liste doit comporter un sommet au minimum
-cellule_sommet recherche_sommet(int sommet,liste_sommet* liste);
+cellule_sommet* recherche_sommet(int sommet,liste_sommet* liste);
 
 void ajouter_arete (char* etiquette, int sommet_d, int sommet_c, liste_sommet* liste); //sommet départ et sommet cible
+void affiche();
