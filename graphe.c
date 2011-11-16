@@ -3,19 +3,17 @@
 
 // Ajoute un sommet à la fin de la liste donnée, avec le numéro donné
 void ajouter_sommet(int numero, liste_sommet* liste, char* etiquette)
-{
-	cellule_sommet *nouveau;
+{   cellule_sommet *nouveau=malloc(sizeof(cellule_sommet));
 	nouveau->numero=numero;
 	nouveau->etiquette=etiquette;
 	nouveau->suivant=NULL;
+	nouveau->liste_arete = NULL;
 	if(liste->depart==NULL)
-	{
-		liste->depart=nouveau;
+	{  	liste->depart=nouveau;
 		liste->fin=nouveau;
 	}
 	else
-	{
-		liste->fin->suivant=nouveau;
+	{   liste->fin->suivant=nouveau;
 		liste->fin=nouveau;
 	}
 }
@@ -23,7 +21,7 @@ void ajouter_sommet(int numero, liste_sommet* liste, char* etiquette)
 // Ajoute une arete au début de la liste donnée
 void ajouter_arete_l(char* etiquette, cellule_sommet* sommet, int numero)
 {
-	cellule_arete *nouveau;
+	cellule_arete *nouveau=malloc(sizeof(cellule_arete));
 	nouveau->arrive=numero;
 	nouveau->etiquette = etiquette;
 	nouveau->suivante=sommet->liste_arete;
@@ -64,30 +62,30 @@ void affiche(liste_sommet* liste)
     while (parcours!=NULL){
         cellule_arete *reparcours=parcours->liste_arete;
         int dep= parcours->numero;
+        char * etiqu = parcours->etiquette;
+        printf("%d %s \n", dep , etiqu);
         while (reparcours!=NULL){
-            printf("%d -- %s --> %d", dep , reparcours->etiquette , reparcours->arrive);
+            printf("\t -- %s --> %d\n", reparcours->etiquette , reparcours->arrive);
             reparcours=reparcours->suivante;
         }
         parcours=parcours->suivant;
     }
-	printf("ZBOOOOOOOB");
 }
 
 
 void main(){
-    liste_sommet* encule;
-    encule->depart=NULL;
-
-    ajouter_sommet(1,encule ,"");
-    ajouter_sommet(2,encule,"");
-    ajouter_sommet(3,encule,"");
-    ajouter_sommet(4,encule,"");
-    ajouter_sommet(5,encule,"");
-    ajouter_arete("je",1,2,encule);
-    ajouter_arete("suis",2,3,encule);
-    ajouter_arete("un",3,4,encule);
-    ajouter_arete("connard",4,5,encule);
-    ajouter_arete("assis a cote d'",3,5,encule);
-    affiche(encule);
+    liste_sommet* maman;
+    maman->depart=NULL;
+    ajouter_sommet(1,maman ,"");
+    ajouter_sommet(2,maman,"");
+    ajouter_sommet(3,maman,"si");
+    ajouter_sommet(4,maman,"alors");
+    ajouter_sommet(5,maman,"Fsi");
+    ajouter_arete("bla",1,2,maman);
+    ajouter_arete("bla",2,3,maman);
+    ajouter_arete("vrai",3,4,maman);
+    ajouter_arete("exectution",4,5,maman);
+    ajouter_arete("faux",3,5,maman);
+    affiche(maman);
 
 }
