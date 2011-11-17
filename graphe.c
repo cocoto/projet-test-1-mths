@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "graphe.h"
+#include <string.h>
 
 // Ajoute un sommet à la fin de la liste donnée, avec le numéro donné
 void ajouter_sommet(int numero, liste_sommet* liste, char* etiquette)
