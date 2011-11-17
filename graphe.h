@@ -1,5 +1,5 @@
 /*Précondition de ma structure :
-	La variable liste_sommet.depart doit être initialisée à NULL
+        La variable liste_sommet.depart doit être initialisée à NULL
 */
 
 typedef struct cellule_arete cellule_arete;
@@ -7,20 +7,20 @@ typedef struct cellule_sommet cellule_sommet;
 typedef struct liste_sommet liste_sommet;
 
 struct cellule_arete{
-	int arrive;		//Sommet d'arrivée
-	cellule_arete* suivante;
-	char* etiquette;	//Identificateur de l'arrête
+        int arrive;             //Sommet d'arrivée
+        cellule_arete* suivante;
+        char* etiquette;        //Identificateur de l'arrête
 };
 struct cellule_sommet {
-	int numero;		//Identifiant du commet
-	cellule_arete* liste_arete;
-	cellule_sommet* suivant;
-	char* etiquette;	//Utilisé uniquement pour les conditionnelles
+        int numero;             //Identifiant du commet
+        cellule_arete* liste_arete;
+        cellule_sommet* suivant;
+        char* etiquette;        //Utilisé uniquement pour les conditionnelles
 };
 struct liste_sommet {
-	cellule_sommet* depart;
-	cellule_sommet* fin;
-	int taille;		//implémentable ou non, au choix
+        cellule_sommet* depart;
+        cellule_sommet* fin;
+        int taille;             //implémentable ou non, au choix
 };
 
 // Ajoute un sommet à la fin de la liste donnée, avec le numéro donné

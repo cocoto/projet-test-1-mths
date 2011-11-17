@@ -1,0 +1,5 @@
+1+2;
+Tantque i==j Faire
+	i++;
+	i--;
+Ftantque

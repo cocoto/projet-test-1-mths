@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "graphe.h"
 
 // Ajoute un sommet à la fin de la liste donnée, avec le numéro donné
@@ -63,9 +64,9 @@ void affiche(liste_sommet* liste)
         cellule_arete *reparcours=parcours->liste_arete;
         int dep= parcours->numero;
         char * etiqu = parcours->etiquette;
-        printf("%d %s \n", dep , etiqu);
+        printf("sommet %d %s \n", dep , etiqu);
         while (reparcours!=NULL){
-            printf("\t -- %s --> %d\n", reparcours->etiquette , reparcours->arrive);
+            printf("\t --%s--> sommet %d\n", reparcours->etiquette , reparcours->arrive);
             reparcours=reparcours->suivante;
         }
         parcours=parcours->suivant;
@@ -73,7 +74,7 @@ void affiche(liste_sommet* liste)
 }
 
 
-void main(){
+/*void main(){
     liste_sommet* maman;
     maman->depart=NULL;
     ajouter_sommet(1,maman ,"");
@@ -88,4 +89,4 @@ void main(){
     ajouter_arete("faux",3,5,maman);
     affiche(maman);
 
-}
+}*/
