@@ -1,16 +1,15 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include "graphe.h"
 #include <string.h>
+#include "graphe.h"
 
-int main(char* argv[])
+int main(int argc,char* argv[])
 {
 	//Création d'un nouveau graphique
 	liste_sommet* graphe=malloc(sizeof(liste_sommet));
 	graphe->depart=NULL;
-	
 	//Parsing du graphe
-	char *nomfichier="pseudocode.txt";
+	char *nomfichier=argv[1];
 	if(parse(nomfichier,graphe)==0)
 	{
 		printf("Impossible d'ouvrir le fichier");
@@ -19,8 +18,8 @@ int main(char* argv[])
 	
 	
 	//Affichage du graphe
-	affiche(graphe);
-	
+	//affiche(graphe);
+	printf("Mesure Macabre : %d \n",mcCabe(graphe));
 	
 	return 0;
 }

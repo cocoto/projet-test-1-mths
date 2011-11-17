@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "graphe.h"
-#include <string.h>
 
 // Ajoute un sommet à la fin de la liste donnée, avec le numéro donné
 void ajouter_sommet(int numero, liste_sommet* liste, char* etiquette)
@@ -52,7 +51,6 @@ cellule_sommet* recherche_sommet(int sommet,liste_sommet* liste)
 	}
 }
 
-
 void ajouter_arete (char* etiquette, int sommet_d, int sommet_c, liste_sommet* liste) //sommet départ et sommet cible
 {
 	ajouter_arete_l(etiquette, recherche_sommet(sommet_d,liste), sommet_c);
@@ -73,21 +71,3 @@ void affiche(liste_sommet* liste)
         parcours=parcours->suivant;
     }
 }
-
-
-/*void main(){
-    liste_sommet* maman;
-    maman->depart=NULL;
-    ajouter_sommet(1,maman ,"");
-    ajouter_sommet(2,maman,"");
-    ajouter_sommet(3,maman,"si");
-    ajouter_sommet(4,maman,"alors");
-    ajouter_sommet(5,maman,"Fsi");
-    ajouter_arete("bla",1,2,maman);
-    ajouter_arete("bla",2,3,maman);
-    ajouter_arete("vrai",3,4,maman);
-    ajouter_arete("exectution",4,5,maman);
-    ajouter_arete("faux",3,5,maman);
-    affiche(maman);
-
-}*/

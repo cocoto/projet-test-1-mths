@@ -29,7 +29,7 @@ int parse(char *nomfichier,liste_sommet *graphe)
 	fscanf(fichier,"%s",motlu); //Lecture du premier mot
 	while(!feof(fichier))		//Tant que le fichier n'est pas terminé
 	{	
-		printf("%s",motlu);
+		//printf("%s",motlu);
 		if(strcmp(motlu,"Si")==0) //si nous tombons sur une conditionnelle
 		{	
 			char* cond=malloc(sizeof(char)); //On initialise l'etiquette de conditionnelle
