@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "graphe.h"
+#include "analyse.h"
 
 int main(int argc,char* argv[])
 {
@@ -18,8 +19,14 @@ int main(int argc,char* argv[])
 	
 	
 	//Affichage du graphe
-	//affiche(graphe);
+	affiche(graphe);
 	printf("Mesure Macabre : %d \n",mcCabe(graphe));
+	int chemin[5000];
+	printf("Couverture des CHEMINS ======================\n");
+	affiche_couverture(couverture_chemins(graphe,chemin,0,5000,0));
 	
+	printf("Couverture des SOMMETS =====================\n");
+	int chemin_2[5000];
+	affiche_couverture(couverture_sommets(graphe,chemin_2,0,5000,0));
 	return 0;
 }

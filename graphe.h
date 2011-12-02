@@ -16,6 +16,7 @@ struct cellule_sommet {
         cellule_arete* liste_arete;
         cellule_sommet* suivant;
         char* etiquette;        //Utilisé uniquement pour les conditionnelles
+        int condmod; 		//0 : SI 1 : TANT QUE
 };
 struct liste_sommet {
         cellule_sommet* depart;
@@ -24,7 +25,7 @@ struct liste_sommet {
 };
 
 // Ajoute un sommet à la fin de la liste donnée, avec le numéro donné
-void ajouter_sommet(int numero, liste_sommet* liste, char* etiquette);
+void ajouter_sommet(int numero, liste_sommet* liste, char* etiquette, int condmod);
 
 // Ajoute une arete au début de la liste donnée
 void ajouter_arete_l(char* etiquette, cellule_sommet* sommet, int numero);

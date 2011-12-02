@@ -3,12 +3,13 @@
 #include "graphe.h"
 
 // Ajoute un sommet à la fin de la liste donnée, avec le numéro donné
-void ajouter_sommet(int numero, liste_sommet* liste, char* etiquette)
+void ajouter_sommet(int numero, liste_sommet* liste, char* etiquette, int condmod)
 {   cellule_sommet *nouveau=malloc(sizeof(cellule_sommet));
 	nouveau->numero=numero;
 	nouveau->etiquette=etiquette;
 	nouveau->suivant=NULL;
 	nouveau->liste_arete = NULL;
+	nouveau->condmod=condmod;
 	if(liste->depart==NULL)
 	{  	liste->depart=nouveau;
 		liste->fin=nouveau;
@@ -46,7 +47,7 @@ cellule_sommet* recherche_sommet(int sommet,liste_sommet* liste)
 	}
 	else	//si jamais on appel un sommet inconnu (précondition non respectée) @TODO attention aux boucles infinies
 	{
-		ajouter_sommet(sommet,liste,"");
+		ajouter_sommet(sommet,liste,"",0);
 		return recherche_sommet(sommet,liste);
 	}
 }

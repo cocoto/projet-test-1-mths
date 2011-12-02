@@ -1,5 +1,11 @@
-1+2;
-Tantque i==j Faire
+a+b;
+Si a Alors
+	b;
 	i++;
-	i--;
+Sinon
+	c;
+Fsi
+Tantque a==c Faire
+	a=b;
 Ftantque
+b--;
