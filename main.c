@@ -21,12 +21,17 @@ int main(int argc,char* argv[])
 	//Affichage du graphe
 	affiche(graphe);
 	printf("Mesure Macabre : %d \n",mcCabe(graphe));
-	int chemin[5000];
+	int chemin[50];
 	printf("Couverture des CHEMINS ======================\n");
 	affiche_couverture(couverture_chemins(graphe,chemin,0,50,0));
 	
 	printf("Couverture des SOMMETS =====================\n");
-	int chemin_2[5000];
+	int chemin_2[50];
+	affiche_couverture(couverture_aretes(graphe,chemin_2,0,50,0,-1));
+	
+	
+	printf("Couverture des ARETES =====================\n");
+	int chemin_3[50];
 	affiche_couverture(couverture_sommets(graphe,chemin_2,0,50,0,-1));
 	return 0;
 }

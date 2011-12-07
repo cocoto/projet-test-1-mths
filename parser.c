@@ -60,7 +60,7 @@ int parse(char *nomfichier,liste_sommet *graphe)
 		{	
 			ajouter_sommet(nbsommet+1,graphe,"",0); //On creer la branche "Vraie"
 			nbsommet++;
-			ajouter_arete("faux",savesommet[taillesave-1],nbsommet,graphe);
+			ajouter_arete("sinon (faux)",savesommet[taillesave-1],nbsommet,graphe);
 			savesommet[taillesave-1]=sommetactuel;	//on sauvegarde la fin de la branche "vrai"
 			sommetactuel=nbsommet;
 			sinon=1;

@@ -3,13 +3,10 @@ Si a Alors
 	i++;
 Sinon
 	c;
-	d++;
 Fsi
 Tantque a==c Faire
 	Si a==b Alors
 	a=b;
-	Sinon
-	a=2;
 	Fsi
-	a=b;
 Ftantque
+a++;

@@ -109,12 +109,6 @@ struct liste_chemin* couverture_chemins(liste_sommet* graphe,int *chemin,int tai
 
 
 
-
-
-
-
-
-
 struct liste_chemin* couverture_sommets(liste_sommet* graphe,int *chemin,int taille_chemin, int long_total, int sommet_suivant, int sommet_fin)
 {
 	struct liste_chemin *resultat=malloc(sizeof(struct liste_chemin));
@@ -142,7 +136,6 @@ struct liste_chemin* couverture_sommets(liste_sommet* graphe,int *chemin,int tai
 		{
 			if(parcour->liste_arete->suivante!=NULL) //Si nous sommes sur un conditionnel
 			{
-				//Si nous avons déjà croisé ce sommet, nous venons de boucler un tant_que
 				if(strcmp(parcour->liste_arete->etiquette, "Ftantque")==0)//Si nous sommes dans un tantque
 					{	
 						struct liste_chemin *resultat2=malloc(sizeof(struct liste_chemin));
@@ -153,16 +146,121 @@ struct liste_chemin* couverture_sommets(liste_sommet* graphe,int *chemin,int tai
 						//On complète la branche du tant que
 						resultat2=couverture_sommets(graphe,chemin2,0,50,parcour->liste_arete->suivante->arrive, parcour->numero);
 						//On concatene chaque chemin trouvé avec notre chemin déjà parcouru
+						int taille;
 						while(resultat2!=NULL)//On parcourt les chemins
 						{
-							//printf("%d\n",long_total+(resultat2->taille_chemin)+1);
-							int taille=taille_chemin+(resultat2->taille_chemin);
-							int *chem2=malloc(sizeof(int)*taille);
+							taille=taille_chemin+(resultat2->taille_chemin);
+							int *chem2;
+							chem2=malloc(sizeof(int)*taille);
 							memcpy(chem2,chemin,sizeof(int)*taille_chemin);
 							chemin=chem2;
 							//printf("%d",chemin[taille_chemin]);
 							memcpy(&chemin[taille_chemin],resultat2->chemin,sizeof(int)*resultat2->taille_chemin);
-							taille_chemin=taille_chemin+(resultat2->taille_chemin);
+							taille_chemin=taille;
+							long_total=taille;
+							resultat2=resultat2->suivant;
+						}
+						
+						//On poursuit la lecture*/			
+						parcour=recherche_sommet(parcour->liste_arete->arrive,graphe); //On passe au sommet suivant
+					}
+				else //si nous sommes dans un si
+				{
+					if(strcmp(parcour->liste_arete->etiquette, "faux")==0)//Si il n'y a pas de sinon
+					{
+						chemin[taille_chemin]=parcour->numero;//On ajoute sommet à notre chemin
+						taille_chemin++; //Augmente la taille du tableau
+						parcour=recherche_sommet(parcour->liste_arete->suivante->arrive,graphe); //On passe au sommet suivant
+					}
+					else
+					{
+						struct liste_chemin *resultat2=malloc(sizeof(struct liste_chemin));
+					
+						//On arrive dans une conditionelle
+						chemin[taille_chemin]=parcour->numero;//On ajoute sommet à notre chemin
+						taille_chemin++;
+					
+						int* chemin2=malloc(sizeof(int)*taille_chemin); //On créé une copie de notre chemin
+						memcpy(chemin2,chemin,sizeof(int)*taille_chemin);
+					
+						resultat=couverture_sommets(graphe,chemin,taille_chemin,long_total,parcour->liste_arete->arrive,sommet_fin);
+						//On complète la branche de gauche
+						resultat2=couverture_sommets(graphe,chemin2,taille_chemin,long_total,parcour->liste_arete->suivante->arrive,sommet_fin);
+						//Puis celle de droite
+						struct liste_chemin *parcour_res=resultat;
+						while(parcour_res->suivant!=NULL)
+						{
+							parcour_res=parcour_res->suivant;
+						}
+						parcour_res->suivant=resultat2;
+						arret=1;
+					}
+				}
+			}
+			else
+			{
+				chemin[taille_chemin]=parcour->numero;//On ajoute sommet à notre chemin
+				taille_chemin++; //Augmente la taille du tableau
+				parcour=recherche_sommet(parcour->liste_arete->arrive,graphe); //On passe au sommet suivant
+			}
+		}
+	}
+	return resultat;
+}
+
+
+
+
+
+struct liste_chemin* couverture_aretes(liste_sommet* graphe,int *chemin,int taille_chemin, int long_total, int sommet_suivant, int sommet_fin)
+{
+	struct liste_chemin *resultat=malloc(sizeof(struct liste_chemin));
+	int arret=0;
+	cellule_sommet *parcour=recherche_sommet(sommet_suivant,graphe);
+	while(arret==0) //tant que nous ne tombons pas sur une coditionelle
+	{
+		if(taille_chemin-1==long_total) //si on dépasse la mémoire
+		{
+			chemin=realloc(chemin,sizeof(int)*long_total*2);//On réalloue le tableau de traille double
+			long_total*=2;
+		}
+		if(parcour->suivant==NULL || parcour->numero==sommet_fin) //Si l'on arrive à la fin de notre chemin
+		{
+			chemin[taille_chemin]=parcour->numero;//On ajoute sommet à notre chemin
+			taille_chemin++;
+			resultat=malloc(sizeof(struct liste_chemin));
+			resultat->chemin=chemin;
+			resultat->suivant=NULL;
+			resultat->taille_chemin=taille_chemin;
+			arret=1;
+			//affiche_couverture(resultat);
+		}
+		else
+		{
+			if(parcour->liste_arete->suivante!=NULL) //Si nous sommes sur un conditionnel
+			{
+				if(strcmp(parcour->liste_arete->etiquette, "Ftantque")==0)//Si nous sommes dans un tantque
+					{	
+						struct liste_chemin *resultat2=malloc(sizeof(struct liste_chemin));
+						chemin[taille_chemin]=parcour->numero;
+						taille_chemin++;
+						//printf("coucou");			
+						int *chemin2=calloc(50,sizeof(int)); //On créér un chemin vide
+						//On complète la branche du tant que
+						resultat2=couverture_aretes(graphe,chemin2,0,50,parcour->liste_arete->suivante->arrive, parcour->numero);
+						//On concatene chaque chemin trouvé avec notre chemin déjà parcouru
+						int taille;
+						while(resultat2!=NULL)//On parcourt les chemins
+						{
+							taille=taille_chemin+(resultat2->taille_chemin);
+							int *chem2;
+							chem2=malloc(sizeof(int)*taille);
+							memcpy(chem2,chemin,sizeof(int)*taille_chemin);
+							chemin=chem2;
+							//printf("%d",chemin[taille_chemin]);
+							memcpy(&chemin[taille_chemin],resultat2->chemin,sizeof(int)*resultat2->taille_chemin);
+							taille_chemin=taille;
+							long_total=taille;
 							resultat2=resultat2->suivant;
 						}
 						
@@ -180,9 +278,9 @@ struct liste_chemin* couverture_sommets(liste_sommet* graphe,int *chemin,int tai
 					int* chemin2=malloc(sizeof(int)*taille_chemin); //On créé une copie de notre chemin
 					memcpy(chemin2,chemin,sizeof(int)*taille_chemin);
 					
-					resultat=couverture_sommets(graphe,chemin,taille_chemin,long_total,parcour->liste_arete->arrive,sommet_fin);
+					resultat=couverture_aretes(graphe,chemin,taille_chemin,long_total,parcour->liste_arete->arrive,sommet_fin);
 					//On complète la branche de gauche
-					resultat2=couverture_sommets(graphe,chemin2,taille_chemin,long_total,parcour->liste_arete->suivante->arrive,sommet_fin);
+					resultat2=couverture_aretes(graphe,chemin2,taille_chemin,long_total,parcour->liste_arete->suivante->arrive,sommet_fin);
 					//Puis celle de droite
 					struct liste_chemin *parcour_res=resultat;
 					while(parcour_res->suivant!=NULL)
@@ -203,94 +301,6 @@ struct liste_chemin* couverture_sommets(liste_sommet* graphe,int *chemin,int tai
 	}
 	return resultat;
 }
-
-
-
-
-
-
-
-struct liste_chemin* jeux_test(liste_sommet* graphe,int *chemin,int taille_chemin, int long_total, int sommet_suivant, char* instructions)
-{
-	struct liste_chemin *resultat=malloc(sizeof(struct liste_chemin));
-	int arret=0;
-	cellule_sommet *parcour=recherche_sommet(sommet_suivant,graphe);
-	while(arret==0) //tant que nous ne tombons pas sur une coditionelle
-	{
-		if(taille_chemin-1==long_total) //si on dépasse la mémoire
-		{
-			chemin=realloc(chemin,sizeof(int)*long_total*2);//On réalloue le tableau de traille double
-			long_total*=2;
-		}
-		if(parcour->suivant==NULL) //Si l'on arrive à la fin de notre chemin
-		{
-			chemin[taille_chemin]=parcour->numero;//On ajoute sommet à notre chemin
-			taille_chemin++;
-			resultat=malloc(sizeof(struct liste_chemin));
-			resultat->chemin=chemin;
-			resultat->suivant=NULL;
-			resultat->taille_chemin=taille_chemin;
-			arret=1;
-		}
-		else
-		{
-			if(parcour->liste_arete->suivante!=NULL) //Si nous sommes sur un conditionnel
-			{
-				//Si nous avons déjà croisé ce sommet, nous venons de boucler un tant_que
-				if(recherche_sommet_chemin(chemin,taille_chemin,parcour->numero)==1)
-				{
-					chemin[taille_chemin]=parcour->numero;//On ajoute sommet à notre chemin
-					taille_chemin++;
-					parcour=recherche_sommet(parcour->liste_arete->arrive,graphe);//On saute à la sortie du tant_que
-				}
-				else
-				{
-					struct liste_chemin *resultat2=malloc(sizeof(struct liste_chemin));
-					
-					//On arrive dans une conditionelle
-					chemin[taille_chemin]=parcour->numero;//On ajoute sommet à notre chemin
-					taille_chemin++;
-					
-					int* chemin2=malloc(sizeof(int)*taille_chemin); //On créé une copie de notre chemin
-					memcpy(chemin2,chemin,sizeof(int)*taille_chemin);
-					
-					resultat=couverture_chemins(graphe,chemin,taille_chemin,long_total,parcour->liste_arete->arrive, instructions);
-					//On complète la branche de gauche
-					resultat2=couverture_chemins(graphe,chemin2,taille_chemin,long_total,parcour->liste_arete->suivante->arrive, instructions);
-					//Puis celle de droite
-					struct liste_chemin *parcour_res=resultat;
-					while(parcour_res->suivant!=NULL)
-					{
-						parcour_res=parcour_res->suivant;
-					}
-					parcour_res->suivant=resultat2;
-					arret=1;
-				}
-			}
-			else
-			{
-				chemin[taille_chemin]=parcour->numero;//On ajoute sommet à notre chemin
-				taille_chemin++; //Augmente la taille du tableau
-				parcour=recherche_sommet(parcour->liste_arete->arrive,graphe); //On passe au sommet suivant
-			}
-		}
-	}
-	return resultat;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
