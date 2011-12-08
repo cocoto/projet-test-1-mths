@@ -55,11 +55,11 @@ linkcolor= blue,%couleur des liens internes
 		\end{itemize}
 		L'ajout se fait ensuite de façon standard, on crée une nouvelle cellule arête et on l'ajoute en tête de la liste d'arête.
 	\subsection{Les fonctions de recherche et d'affichage}
-		Ces deux fonctions reposent sur le même principe, on crée un clone de la liste que l'on parcours ensuite.
+		\label{parcourir}Ces deux fonctions reposent sur le même principe, on crée un clone de la liste que l'on parcourt ensuite.
 
  Dans le cas de la recherche, on s'arrête dès que l'on trouve le sommet recherché ou que l'on est arrivé à la fin de la liste. Si on a effectivement trouvé on renvoie la cellule du sommet, sinon on ajoute le sommet à la liste et on rappelle la fonction à nouveau. Une utilisation normale n'appellera jamais de sommet inconnu mais nous avons fais ce choix afin d'éviter un blocage du programme en cas d'erreur.
 
-	Dans le cas de l'affichage, le parcours se fait systématiquement jusqu'à la fin. Pour chaque sommet, on affiche sont numéro et son étiquette, puis on parcours sa liste d'arête de la même manière que la liste de sommet. A chaque arête, on affiche l'étiquette et le sommet d'arrivée, puis on passe à l'arête suivante. Quand la liste est finie, on passe au sommet suivant.
+	Dans le cas de l'affichage, le parcours se fait systématiquement jusqu'à la fin. Pour chaque sommet, on affiche sont numéro et son étiquette, puis on parcourt sa liste d'arête de la même manière que la liste de sommet. A chaque arête, on affiche l'étiquette et le sommet d'arrivée, puis on passe à l'arête suivante. Quand la liste est finie, on passe au sommet suivant.
 
 	\section{Ouverture et parsing}
 		\textit{On considère dans la suite de ce rapport que le fichier d'entrée contient uniquement le programme, correctement syntaxifié.}
@@ -95,6 +95,45 @@ if(fichier==NULL)
 		\begin{center}\includegraphics[width=17cm,height=7cm]{dessin.pdf}\end{center}
 	On remarque que quelque soit le type de conditionnelle, on utilise toujours une seule case de notre \textit{Tableau de sauvegarde}. En cas d'imbrication de conditionnelles, le programme utilisera les cases suivantes, et les détruiras à la fin des traitements. Ainsi, en limitant à 50 la taille de notre tableau, nous limitons le nombre d'imbrication \textbf{maximum} à 50, ce qui est déjà une limite très grande. Un simple jeu de ré-allocation permettrait en outre de fournir une limite quasi infinie.
 	\section{Analyse du graphe}
+	\subsection{Mesure de McCabe}
+		On utilise 2 compteurs, un pour les sommets un pour les arcs. On parcourt l'ensemble du graphe comme vu en \ref{parcourir} , mais cette fois on incremente le compteur de sommet pour chaque cellule\_sommet et celui des arcs pour chaque cellule\_arête. En fin de graphe, on calcule et on retourne la mesure de McCabe $= Nb_{Aretes} - Nb_{Sommets} + 2$.
+	\subsection{Couverture des chemins}
+		La couverture des chemins prend un graphe , le chemin à remplir, la taille du chemin au moment de l'appel, la taille maximale du tableau dans lequel est gardé le chemin, et le prochain sommet à analyser. Au premier appel, le chemin donné sera vide donc de taille 0 et le prochain sommet sera le tout premier, mais lors d'appels récursifs on sera amené à fournir des chemins déjà partiellement remplis.
+
+		La fonction parcourt le graphe, pour chaque cellule sommet :
+	\begin{itemize}
+	\item Si la cellule suivante est NULL, on arrive à la fin d'un chemin
+		\begin{itemize}
+		\item on ajoute le sommet au chemin
+		\item on crée une liste de chemin vide
+		\item on ajoute le chemin à la liste
+		\end{itemize}
+	\item Sinon si la cellule a plus d'une arête dans sa liste, on est sur une conditionnelle : on verifie si le sommet appartient déjà au chemin
+			\begin{itemize}
+			\item si oui, on a une boucle, donc un tant que par lequel nous sommes déjà passés
+				\begin{itemize}
+				\item on ajoute le sommet au chemin
+				\item on saute au sommet de la première arête pour sortir du Tantque\footnote{En effet, L'ajout en tête des nouveaux arcs au moment du parsing fait que l'arête de sortie de la boucle est la première dans la liste.}
+				\end{itemize}
+			\item sinon, nous avons une conditionnelle traversée pour la première fois :
+				\begin{itemize}
+				\item on duplique la liste resultat
+				\item on ajoute le sommet
+				\item on duplique le chemin
+				\item on défini les listes de chemins par l'appel recursif de la fonction pour le chemin déjà rempli avec comme suivant :
+					\begin{itemize}
+					\item le point d'arrivé du premier arc
+					\item le point d'arrivé de l'arc suivant\footnote{Etant donné la structure des programmes il ne peut pas y avoir plus de 2 arcs.}
+					\end{itemize}
+				\item on ajoute la seconde liste à la fin de la première liste afin de regrouper tous les chemins
+				\end{itemize}
+			\end{itemize}
+		\item Sinon on est sur un chemin simple :
+			\begin{itemize}
+			\item on ajoute le sommet au chemin
+			\item on saute au sommet correspondant à l'arrivée de l'arête
+			\end{itemize}
+		\end{itemize}
 	\section{Pour aller plus loin}
 	\section{Conclusion}
 
