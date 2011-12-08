@@ -76,7 +76,7 @@ if(fichier==NULL)
 }
 		\end{lstlisting}
 		\subsection{Parsing du fichier}
-		L'algorithme repose sur une série de variable définies de la façon suivante :
+		L'algorithme repose sur une série de variables définies de la façon suivante :
 		\begin{itemize}
 		\item motlut : variable contenant le mot en cour de traitement (max. 50 caractères)
 		\item instruction : concaténation des mots lus jusqu'à ``;''
@@ -91,8 +91,8 @@ if(fichier==NULL)
 		
 		Il est important de décrire la manière dont les conditionnelles sont traitées :\\
 		L'algorithme possède un tableau d'entiers dans lequel on peut placer un numéro de sommet dont on nécessite de conserver sa place. Lorsque l'on rencontre un ``Si'' ou un ``Tantque'', on sauvegarde le sommet de condition dans la première case vide du tableau, et l'on crée la branche \textit{vraie}. Lorsque l'on rencontre un ``Sinon'', on remonte au sommet de conditionnelle, on stocke à la place le sommet de fin de branche gauche, et on entame la poursuite du chemin droit. Arrivé à un ``Fsi'', on crée un chemin depuis l'emplacement sauvegardé vers un nouveau sommet, un autre chemin depuis notre emplacement vers ce même sommet, et on continue le parsing. La gestion du Tantque est similaire, à l'inversion près des flèches (arrivé au Ftantque)(on revient vers le sommet sauvegardé et non le sommet créé).\\
-		 Le schéma suivant montre comment sont traitées les conditionnelles :
-		\begin{center}\includegraphics[width=17cm,height=7cm]{dessin.pdf}\end{center}
+		 La figure~\ref{image_cond} montre comment sont traitées les conditionnelles :
+		\begin{figure}[!ht]\begin{center}\includegraphics[width=17cm,height=7cm]{dessin.pdf}\caption{Illustration du traitement des conditionnelles}\label{image_cond}\end{center}\end{figure}
 	On remarque que quelque soit le type de conditionnelle, on utilise toujours une seule case de notre \textit{Tableau de sauvegarde}. En cas d'imbrication de conditionnelles, le programme utilisera les cases suivantes, et les détruiras à la fin des traitements. Ainsi, en limitant à 50 la taille de notre tableau, nous limitons le nombre d'imbrication \textbf{maximum} à 50, ce qui est déjà une limite très grande. Un simple jeu de ré-allocation permettrait en outre de fournir une limite quasi infinie.
 	\section{Analyse du graphe}
 	\subsection{Mesure de McCabe}
@@ -135,6 +135,17 @@ if(fichier==NULL)
 			\end{itemize}
 		\end{itemize}
 	\section{Pour aller plus loin}
+	Il nous était demandé également de réaliser un algorithme de génération de jeux de test. N'ayant pas une définition éxacte de la syntaxe et des possibilités du langage de programmation, il nous est impossible de réellement générer des jeux de test sous la forme $\{x=4,y=\frac{6}{3}\}, $. Nous avons donc pensé prendre les étiquettes de chacunes de nos conditionnelles dans le cadre de la couverture des instructions, et les relier par un symbole \textbf{\&}. Ensuite, la négation de ces expressions aurait put nous donner une couverture complète du programme par jeux de test. Par exemple $\{a<3\ \&\ a>c\ \&\ c=2\}$. Cette solution, facile à mettre en place, possède malheureusement des lacunes :
+	\begin{itemize}
+	\item Impossible de vérifier les incohérences dans les conditionelles ($a<b$ et $b<a$)
+	\item Difficultés à réaliser les inverses de ces expressions (traitement du langage)
+	\item Impossibilité de traiter les boucles Tantque, car les variables changent au cours du parcourt, et la variable d'entrée est l'inverse de celle de sortie
+	\end{itemize}
+	Devant le grand nombre de problèmes issue d'un tel processus, nous n'avons pas souhaité creer l'algorithme associé.
+	
+	Nous aurions put également afficher la liste des programmes présents dans le répertoire d'execution et proposer à l'utilisateur d'en choisir un, mais tout comme l'organisation d'un projet, les sources sont généralement réparties dans différents répertoires, aussi il est plus simple de rentrer le chemin du fichier au clavier.
 	\section{Conclusion}
-
+	\subsection{Bilan des expériences}
+		Ce projet nous a permis de mettre en pratique les connaissances acquises en début de semestre (graphs et couvertures), d'approfondir notre maîtise des listes chainées, fonctions récursives, allocation dynamique en C. Nous regrettons de n'avoir pu utiliser le langage C++, nottemment dans la gestion des chaînes de caractères et des structures (programmation orientée objet).
+	 \subsection{Surement un truc super utile mais je vois pas}
 \end{document}
