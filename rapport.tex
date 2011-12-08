@@ -10,7 +10,7 @@
 \usepackage{graphicx} %Importation d'image
 \lstset{language=C}
 % Informations du rapport
-\title {Rapport \\ Travaux Pratiques Réseaux (Ethernet)}
+\title {Rapport \\ Travaux Pratiques Etudes des Algorithmes \\ Évaluation dynamique de programme}
 \author {Quentin Tonneau - Adrien Lardenois}
 \date{}
 %Propriétés des liens
@@ -27,13 +27,13 @@ linkcolor= blue,%couleur des liens internes
 	
 	
 	\section{Introduction}
-	Le but de ce projet est de fournir un logiciel capable de donner et d'évaluer le graphe de contrôle d'un programme écrit dans un pseudo langage ``simple''. Pour cela on met en place une interface très simple : on affiche un menu à choix multiple numéroté, le numéro choisi par l'utilisateur passe dans un ``switch'' qui execute les différentes actions correspondantes. On utilise un flag pour verifier qu'un fichier est bien en cours d'analyse pour éviter les erreurs.
+	Le but de ce projet est de fournir un logiciel capable de donner et d'évaluer le graphe de contrôle d'un programme écrit dans un pseudo langage ``simple''. Pour cela on met en place une interface très simple : on affiche un menu à choix multiple numéroté, le numéro choisi par l'utilisateur passe dans un ``switch'' qui exécute les différentes actions correspondantes. On utilise un flag pour vérifier qu'un fichier est bien en cours d'analyse pour éviter les erreurs.
 
-	Pour la création du graphe en lui-même, nous avons  choisi une liste chainée. Chaque cellule contient :
+	Pour la création du graphe en lui-même, nous avons  choisi une liste chaînée. Chaque cellule contient :
 	\begin{itemize}
 		\item un sommet numéroté
-		\item une étiquette (qui peut etre vide)
-		\item la liste chainée des arêtes qui partent de ce sommet
+		\item une étiquette (qui peut être vide)
+		\item la liste chaînée des arêtes qui partent de ce sommet
 		\item le lien vers la cellule suivante
 	\end{itemize}
 	Une cellule d'arête contient : 
@@ -43,23 +43,23 @@ linkcolor= blue,%couleur des liens internes
 		\item la cellule arête suivante
 	\end{itemize}
 	
-	L'utilisation d'une liste chainée de liste chainée permet de simplifier la manipulation de la mémoire tout en gardant une forte coherence des données, chaque liste d'arêtes étant attachée à son sommet d'origine. On dispose de fonctions pour ajouter des sommets et des arêtes, rechercher un sommet dans la liste, et enfin une fonction d'affichage du graphe.
+	L'utilisation d'une liste chaînée de liste chaînée permet de simplifier la manipulation de la mémoire tout en gardant une forte cohérence des données, chaque liste d'arêtes étant attachée à son sommet d'origine. On dispose de fonctions pour ajouter des sommets et des arêtes, rechercher un sommet dans la liste, et enfin une fonction d'affichage du graphe.
 	\subsection{Les fonctions d'ajout}
-		L'ajout d'un sommet prend simplement le numéro et l'étiquette du sommet à créer ainsi que la liste à laquelle l'ajouter. On crée alors une nouvelle cellule et on l'ajoute en fin de liste, sauf pour une liste vide où elle devient la seule et unique cellule de la liste. En effet, l'utilisation par notre programme fait que jamais on ne créera deux sommets de même numéro et que les sommets sont créés en suivant une incrémentation régulière. Ainsi la liste proposera les sommets dans l'ordre de numérotation\footnote{qui pourra être différent de l'ordre d'éxecution, surtout dans les programmes contenant des conditionnelles.}
+		L'ajout d'un sommet prend simplement le numéro et l'étiquette du sommet à créer ainsi que la liste à laquelle l'ajouter. On crée alors une nouvelle cellule et on l'ajoute en fin de liste, sauf pour une liste vide où elle devient la seule et unique cellule de la liste. En effet, l'utilisation par notre programme fait que jamais on ne créera deux sommets de même numéro et que les sommets sont créés en suivant une incrémentation régulière. Ainsi la liste proposera les sommets dans l'ordre de numérotation\footnote{qui pourra être différent de l'ordre d'exécution, surtout dans les programmes contenant des conditionnelles.}
 
-		L'ajout d'une arête passe par une fonction intermediaire. En apparence, on appelle \textbf{ajouter\_arete} avec pour arguments l'etiquette, le sommet de départ, le sommet d'arrivée et la liste de sommets. En fait, cette fonction n'est qu'un ``masque'' qui appelle \textbf{ajouter\_arete\_l} avec comme arguments : 
+		L'ajout d'une arête passe par une fonction intermédiaire. En apparence, on appelle \textbf{ajouter\_arête} avec pour arguments l'étiquette, le sommet de départ, le sommet d'arrivée et la liste de sommets. En fait, cette fonction n'est qu'un ``masque'' qui appelle \textbf{ajouter\_arête\_l} avec comme arguments : 
 		\begin{itemize}
-			\item l'etiquette
+			\item l'étiquette
 			\item la cellule du sommet de départ, donnée par \textit{recherche\_sommet(sommet\_d, liste)}
 			\item le sommet d'arrivée
 		\end{itemize}
-		L'ajout se fait ensuite de façon standard, on crée une nouvelle cellule arête et on l'ajoute en tête de la liste d'arete.
+		L'ajout se fait ensuite de façon standard, on crée une nouvelle cellule arête et on l'ajoute en tête de la liste d'arête.
 	\subsection{Les fonctions de recherche et d'affichage}
 		Ces deux fonctions reposent sur le même principe, on crée un clone de la liste que l'on parcours ensuite.
 
- Dans le cas de la recherche, on s'arrête dès que l'on trouve le sommet recherché ou que l'on est arrivé à la fin de la liste. Si on a effectivement trouvé on renvoie la cellule du sommet, sinon on ajoute le sommet à la liste et on rappelle la fonction à nouveau. Une utilisation normale n'appellera jamais de sommet inconnu mais nous avons fais ce choix afin d'eviter un blocage du programme en cas d'erreur.
+ Dans le cas de la recherche, on s'arrête dès que l'on trouve le sommet recherché ou que l'on est arrivé à la fin de la liste. Si on a effectivement trouvé on renvoie la cellule du sommet, sinon on ajoute le sommet à la liste et on rappelle la fonction à nouveau. Une utilisation normale n'appellera jamais de sommet inconnu mais nous avons fais ce choix afin d'éviter un blocage du programme en cas d'erreur.
 
-	Dans le cas de l'affichage, le parcours se fait systematiquement jusqu'à la fin. Pour chaque sommet, on affiche sont numéro et son étiquette, puis on parcours sa liste d'arête de la même manière que la liste de sommet. A chaque arête, on affiche l'etiquette et le sommet d'arrivée, puis on passe à l'arête suivante. Quand la liste est finie, on passe au sommet suivant.
+	Dans le cas de l'affichage, le parcours se fait systématiquement jusqu'à la fin. Pour chaque sommet, on affiche sont numéro et son étiquette, puis on parcours sa liste d'arête de la même manière que la liste de sommet. A chaque arête, on affiche l'étiquette et le sommet d'arrivée, puis on passe à l'arête suivante. Quand la liste est finie, on passe au sommet suivant.
 
 	\section{Ouverture et parsing}
 		\textit{On considère dans la suite de ce rapport que le fichier d'entrée contient uniquement le programme, correctement syntaxifié.}
@@ -85,14 +85,15 @@ if(fichier==NULL)
 		\end{itemize}
 		Le parsing s'effectue à l'aide de la fonction fscanf, qui récupère un à un les mots contenus dans le fichier.
 		\subsubsection{Cas général}
-		Dans un fonctionnement général, c'est à dire un enchainement d'instructions sans conditionelle, l'algorithme concatène les mots lus jusqu'au symbole ';', puis crée une arête à l'aide de \textbf{ajouter\_sommet(nbsommet+1,graphe,"")} (sommet d'arrivée) puis \textbf{ajouter\_arete(instruction,sommetactuel,nbsommet,graphe)} dans laquelle nbsommet correspond au numéro du sommet tout juste créé.
+		Dans un fonctionnement général, c'est à dire un enchaînement d'instructions sans conditionnelle, l'algorithme concatène les mots lus jusqu'au symbole ';', puis crée une arête à l'aide de \\\textbf{ajouter\_sommet(nbsommet+1,graphe,"")} (sommet d'arrivée) puis \\\textbf{ajouter\_arête(instruction,sommetactuel,nbsommet,graphe)} dans laquelle nbsommet correspond au numéro du sommet tout juste créé.
 		\subsubsection{Traitement des conditionnelles}
-		Lorsque le programme rencontre le mot \textbf{Si}, il concatène l'ensemble des informations suivantes jusqu'au mot \textbf{Alors} dans une variable crée un sommet portant pour étiquette la chaîne précédement générée, le relie au graphique à l'aide d'une branche vierge.
+		Lorsque le programme rencontre le mot \textbf{Si}, il concatène l'ensemble des informations suivantes jusqu'au mot \textbf{Alors} dans une variable, crée un sommet portant pour étiquette la chaîne précédemment générée, et le relie au graphique à l'aide d'une branche vierge.
 		
-		Il est important de décrire la manière dont les conditionelles sont traitées :\\
-		L'algorithme possède un tableau d'entiers dans lequel on peut placer un numéro de sommet dont on nécéssite de conserver sa place. Le schéma suivant montre comment sont traitées les conditionelles :
-		\begin{center}\includegraphics[width=15cm,height=15cm]{dessin.pdf}\end{center}
-	On voit que le traitement du Fsi et du Ftantque (Rouge ou vert) est presque identique. Le programme récupère dans le tableau le sommet sauvegardé, créer un chemin vers (resp. depuis) ce dernier depuis (resp. vers) le dernier sommet créé, et continu le parsing. On remarque que quelque soit le type de conditionnelle, on utilise toujours une seule case de notre \textit{Tableau de sauvegarde}, et l'algorithme utilise toujours la dernière case de ce dernier. Ainsi, en cas d'imbrication de conditionnelles, le programme utilisera les cases suivantes, et les détruiras à la fin des traitements. Ainsi, en limitant à 50 la taille de notre tableau, nous limitons le nombre d'imbrication \textbf{maximum} à 50.
+		Il est important de décrire la manière dont les conditionnelles sont traitées :\\
+		L'algorithme possède un tableau d'entiers dans lequel on peut placer un numéro de sommet dont on nécessite de conserver sa place. Lorsque l'on rencontre un ``Si'' ou un ``Tantque'', on sauvegarde le sommet de condition dans la première case vide du tableau, et l'on crée la branche \textit{vraie}. Lorsque l'on rencontre un ``Sinon'', on remonte au sommet de conditionnelle, on stocke à la place le sommet de fin de branche gauche, et on entame la poursuite du chemin droit. Arrivé à un ``Fsi'', on crée un chemin depuis l'emplacement sauvegardé vers un nouveau sommet, un autre chemin depuis notre emplacement vers ce même sommet, et on continue le parsing. La gestion du Tantque est similaire, à l'inversion près des flèches (arrivé au Ftantque)(on revient vers le sommet sauvegardé et non le sommet créé).\\
+		 Le schéma suivant montre comment sont traitées les conditionnelles :
+		\begin{center}\includegraphics[width=17cm,height=7cm]{dessin.pdf}\end{center}
+	On remarque que quelque soit le type de conditionnelle, on utilise toujours une seule case de notre \textit{Tableau de sauvegarde}. En cas d'imbrication de conditionnelles, le programme utilisera les cases suivantes, et les détruiras à la fin des traitements. Ainsi, en limitant à 50 la taille de notre tableau, nous limitons le nombre d'imbrication \textbf{maximum} à 50, ce qui est déjà une limite très grande. Un simple jeu de ré-allocation permettrait en outre de fournir une limite quasi infinie.
 	\section{Analyse du graphe}
 	\section{Pour aller plus loin}
 	\section{Conclusion}
