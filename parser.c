@@ -10,8 +10,7 @@ int parse(char *nomfichier,liste_sommet *graphe)
 	fichier=fopen(nomfichier,"r");
 	if(fichier==NULL)
 	{
-		printf("Impossible d'ouvrir le fichier");
-		return 0; //on quitte le programme avec une erreur 1
+		return 0; //on quitte le programme avec une erreur
 	}
 	
 	//==============Variables du parser
@@ -21,7 +20,7 @@ int parse(char *nomfichier,liste_sommet *graphe)
 	int nbsommet=0;			//Nombre de sommet du graphe
 	int sinon=0; 			//Flag passé à 1 lors d'un "sinon"
 	//==============Tableau de sauvegarde
-	int savesommet[50];		// Tableau de "sauvegarde de sommet" @TODO mode dynamique
+	int savesommet[50];		// Tableau de "sauvegarde de sommet"
 	int taillesave=0;		// Taille du tableau
 	
 	
@@ -43,13 +42,13 @@ int parse(char *nomfichier,liste_sommet *graphe)
 				strcat(cond,motlu);				//Puis on concatène le nouveau mot
 				fscanf(fichier,"%s",motlu);
 			}
-			ajouter_sommet(nbsommet+1,graphe,cond,1);//On créer un nouveau sommet avec l'etiquette
+			ajouter_sommet(nbsommet+1,graphe,cond);//On crée un nouveau sommet avec l'etiquette
 			nbsommet++;
 			ajouter_arete("",sommetactuel,nbsommet,graphe); //On branche ce nouveau sommet à notre graphe
 			sommetactuel=nbsommet;	//on se place sur le sommet conditionnel
 			savesommet[taillesave]=sommetactuel; //On sauvegarde le sommet actuel
 			taillesave++;
-			ajouter_sommet(nbsommet+1,graphe,"",0); //On creer la branche "Vraie"
+			ajouter_sommet(nbsommet+1,graphe,""); //On crée la branche "Vraie"
 			nbsommet++;
 			ajouter_arete("vrai",sommetactuel,nbsommet,graphe);
 			sommetactuel=nbsommet;
@@ -58,7 +57,7 @@ int parse(char *nomfichier,liste_sommet *graphe)
 		}
 		else if(strcmp(motlu,"Sinon")==0) //si nous tombons sur une conditionnelle
 		{	
-			ajouter_sommet(nbsommet+1,graphe,"",0); //On creer la branche "Vraie"
+			ajouter_sommet(nbsommet+1,graphe,""); //On crée la branche "Vraie"
 			nbsommet++;
 			ajouter_arete("sinon (faux)",savesommet[taillesave-1],nbsommet,graphe);
 			savesommet[taillesave-1]=sommetactuel;	//on sauvegarde la fin de la branche "vrai"
@@ -67,7 +66,7 @@ int parse(char *nomfichier,liste_sommet *graphe)
 		}
 		else if(strcmp(motlu,"Fsi")==0) //si nous tombons sur une conditionnelle
 		{	
-			ajouter_sommet(nbsommet+1,graphe,"",0); //On creer la branche "Vraie"
+			ajouter_sommet(nbsommet+1,graphe,""); //On crée la branche "Vraie"
 			nbsommet++;
 			
 			//Si l'on est pas passé par un "sinon", l'étiquette doit porter la mention "faux"
@@ -98,14 +97,14 @@ int parse(char *nomfichier,liste_sommet *graphe)
 				strcat(cond,motlu);			//Puis on concatène le nouveau mot
 				fscanf(fichier,"%s",motlu);
 			}
-			ajouter_sommet(nbsommet+1,graphe,cond,2);//On créer un nouveau sommet avec l'etiquette
+			ajouter_sommet(nbsommet+1,graphe,cond);//On crée un nouveau sommet avec l'etiquette
 			nbsommet++;
 			ajouter_arete("",sommetactuel,nbsommet,graphe); //On branche ce nouveau sommet à notre graphe
 			sommetactuel=nbsommet;
 			savesommet[taillesave]=sommetactuel; //On sauvegarde le sommet actuel
 			taillesave++;
 			
-			ajouter_sommet(nbsommet+1,graphe,"",0); //On creer la branche "Vraie"
+			ajouter_sommet(nbsommet+1,graphe,""); //On crée la branche "Vrai"
 			nbsommet++;
 			ajouter_arete("vrai",sommetactuel,nbsommet,graphe);
 			sommetactuel=nbsommet;
@@ -113,9 +112,9 @@ int parse(char *nomfichier,liste_sommet *graphe)
 		else if(strcmp(motlu,"Ftantque")==0) //si nous tombons sur une conditionnelle
 		{	
 			ajouter_arete("",sommetactuel,savesommet[taillesave-1],graphe);//On relie ce nouveau sommet au graph
-			ajouter_sommet(nbsommet+1,graphe,"",0);//On créer un nouveau sommet (sortie de tantque)
+			ajouter_sommet(nbsommet+1,graphe,"");//On crée un nouveau sommet (sortie de tantque)
 			nbsommet++;
-			ajouter_arete("Ftantque",savesommet[taillesave-1],nbsommet,graphe);
+			ajouter_arete("Ftantque",savesommet[taillesave-1],nbsommet,graphe); //Et l'arete correspondante
 			taillesave--;
 			sommetactuel=nbsommet;
 		}
@@ -128,7 +127,7 @@ int parse(char *nomfichier,liste_sommet *graphe)
 			strcat(instruction,motlu);			//Puis on concatène le nouveau mot
 			if(motlu[strlen(motlu)-1]==';')
 			{
-				ajouter_sommet(nbsommet+1,graphe,"",0);//On créer un nouveau sommet
+				ajouter_sommet(nbsommet+1,graphe,"");//On crée un nouveau sommet
 				nbsommet++;
 				ajouter_arete(instruction,sommetactuel,nbsommet,graphe);
 				sommetactuel=nbsommet;

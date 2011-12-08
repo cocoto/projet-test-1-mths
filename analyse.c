@@ -40,8 +40,8 @@ void affiche_couverture(struct liste_chemin* chemins)
 	}
 }
 
-//Creer la couverture des chemins élémentaires
-//graphe = graphique à parcourir, chemin=chemin à complèter, taille_chemin = taille du chemin fournis, long_total= longueur du tableau dans lequel se trouvele chemin
+//Créer la couverture des chemins élémentaires
+//graphe = graphique à parcourir, chemin=chemin à complèter, taille_chemin = taille du chemin fournis, long_total= longueur du tableau dans lequel se trouve le chemin
 //sommet_suivant : sommet de départ
 struct liste_chemin* couverture_chemins(liste_sommet* graphe,int *chemin,int taille_chemin, int long_total, int sommet_suivant)
 {
@@ -52,7 +52,7 @@ struct liste_chemin* couverture_chemins(liste_sommet* graphe,int *chemin,int tai
 	{
 		if(taille_chemin-1==long_total) //si on dépasse la mémoire
 		{
-			chemin=realloc(chemin,sizeof(int)*long_total*2);//On réalloue le tableau de traille double
+			chemin=realloc(chemin,sizeof(int)*long_total*2);//On réalloue le tableau de taille double
 			long_total*=2;
 		}
 		if(parcour->suivant==NULL) //Si l'on arrive à la fin de notre chemin
@@ -116,8 +116,8 @@ struct liste_chemin* couverture_chemins(liste_sommet* graphe,int *chemin,int tai
 
 
 
-//Creer la couverture des chemins élémentaires
-//graphe = graphique à parcourir, chemin=chemin à complèter, taille_chemin = taille du chemin fournis, long_total= longueur du tableau dans lequel se trouvele chemin
+//Créer la couverture des sommets
+//graphe = graphique à parcourir, chemin=chemin à complèter, taille_chemin = taille du chemin fournis, long_total= longueur du tableau dans lequel se trouve le chemin
 //sommet_suivant : sommet de départ, sommet_fin : sommet d'arrivée (-1 pour un parcourt total)
 //Commentaires : voir ci-dessus
 struct liste_chemin* couverture_sommets(liste_sommet* graphe,int *chemin,int taille_chemin, int long_total, int sommet_suivant, int sommet_fin)
@@ -129,7 +129,7 @@ struct liste_chemin* couverture_sommets(liste_sommet* graphe,int *chemin,int tai
 	{
 		if(taille_chemin-1==long_total) //si on dépasse la mémoire
 		{
-			chemin=realloc(chemin,sizeof(int)*long_total*2);//On réalloue le tableau de traille double
+			chemin=realloc(chemin,sizeof(int)*long_total*2);//On réalloue le tableau de taille double
 			long_total*=2;
 		}
 		if(parcour->suivant==NULL || parcour->numero==sommet_fin) //Si l'on arrive à la fin de notre chemin
@@ -152,7 +152,7 @@ struct liste_chemin* couverture_sommets(liste_sommet* graphe,int *chemin,int tai
 						struct liste_chemin *resultat2=malloc(sizeof(struct liste_chemin));
 						chemin[taille_chemin]=parcour->numero;
 						taille_chemin++;			
-						int *chemin2=calloc(50,sizeof(int)); //On créér un chemin vide
+						int *chemin2=calloc(50,sizeof(int)); //On crée un chemin vide
 						//On complète la branche du tant que (boucle)
 						resultat2=couverture_sommets(graphe,chemin2,0,50,parcour->liste_arete->suivante->arrive, parcour->numero);
 						//On concatene chaque chemin trouvé avec notre chemin déjà parcouru
@@ -185,8 +185,6 @@ struct liste_chemin* couverture_sommets(liste_sommet* graphe,int *chemin,int tai
 					else
 					{
 						struct liste_chemin *resultat2=malloc(sizeof(struct liste_chemin));
-					
-						//On arrive dans une conditionelle
 						chemin[taille_chemin]=parcour->numero;//On ajoute sommet à notre chemin
 						taille_chemin++;
 					
@@ -221,7 +219,10 @@ struct liste_chemin* couverture_sommets(liste_sommet* graphe,int *chemin,int tai
 
 
 
-
+//Créer la couverture des arêtes
+//graphe = graphique à parcourir, chemin=chemin à complèter, taille_chemin = taille du chemin fournis, long_total= longueur du tableau dans lequel se trouve le chemin
+//sommet_suivant : sommet de départ, sommet_fin : sommet d'arrivée (-1 pour un parcourt total)
+//Commentaires : voir ci-dessus
 struct liste_chemin* couverture_aretes(liste_sommet* graphe,int *chemin,int taille_chemin, int long_total, int sommet_suivant, int sommet_fin)
 {
 	struct liste_chemin *resultat=malloc(sizeof(struct liste_chemin));
@@ -231,7 +232,7 @@ struct liste_chemin* couverture_aretes(liste_sommet* graphe,int *chemin,int tail
 	{
 		if(taille_chemin-1==long_total) //si on dépasse la mémoire
 		{
-			chemin=realloc(chemin,sizeof(int)*long_total*2);//On réalloue le tableau de traille double
+			chemin=realloc(chemin,sizeof(int)*long_total*2);//On réalloue le tableau de taille double
 			long_total*=2;
 		}
 		if(parcour->suivant==NULL || parcour->numero==sommet_fin) //Si l'on arrive à la fin de notre chemin
@@ -247,18 +248,17 @@ struct liste_chemin* couverture_aretes(liste_sommet* graphe,int *chemin,int tail
 		}
 		else
 		{
-			if(parcour->liste_arete->suivante!=NULL) //Si nous sommes sur un conditionnel
+			if(parcour->liste_arete->suivante!=NULL) //Si nous sommes sur une conditionnelle
 			{
 				if(strcmp(parcour->liste_arete->etiquette, "Ftantque")==0)//Si nous sommes dans un tantque
 					{	
 						struct liste_chemin *resultat2=malloc(sizeof(struct liste_chemin));
 						chemin[taille_chemin]=parcour->numero;
-						taille_chemin++;
-						//printf("coucou");			
-						int *chemin2=calloc(50,sizeof(int)); //On créér un chemin vide
+						taille_chemin++;			
+						int *chemin2=calloc(50,sizeof(int)); //On crée un chemin vide
 						//On complète la branche du tant que
 						resultat2=couverture_aretes(graphe,chemin2,0,50,parcour->liste_arete->suivante->arrive, parcour->numero);
-						//On concatene chaque chemin trouvé avec notre chemin déjà parcouru
+						//On concatène chaque chemin trouvé avec notre chemin déjà parcouru
 						int taille;
 						while(resultat2!=NULL)//On parcourt les chemins
 						{
@@ -267,7 +267,6 @@ struct liste_chemin* couverture_aretes(liste_sommet* graphe,int *chemin,int tail
 							chem2=malloc(sizeof(int)*taille);
 							memcpy(chem2,chemin,sizeof(int)*taille_chemin);
 							chemin=chem2;
-							//printf("%d",chemin[taille_chemin]);
 							memcpy(&chemin[taille_chemin],resultat2->chemin,sizeof(int)*resultat2->taille_chemin);
 							taille_chemin=taille;
 							long_total=taille;
@@ -285,7 +284,7 @@ struct liste_chemin* couverture_aretes(liste_sommet* graphe,int *chemin,int tail
 					chemin[taille_chemin]=parcour->numero;//On ajoute sommet à notre chemin
 					taille_chemin++;
 					
-					int* chemin2=malloc(sizeof(int)*taille_chemin); //On créé une copie de notre chemin
+					int* chemin2=malloc(sizeof(int)*taille_chemin); //On crée une copie de notre chemin
 					memcpy(chemin2,chemin,sizeof(int)*taille_chemin);
 					
 					resultat=couverture_aretes(graphe,chemin,taille_chemin,long_total,parcour->liste_arete->arrive,sommet_fin);
@@ -311,6 +310,29 @@ struct liste_chemin* couverture_aretes(liste_sommet* graphe,int *chemin,int tail
 	}
 	return resultat;
 }
+
+//Algorithme de recherche d'un entier dans un tableau d'entier
+int recherche_sommet_chemin(int * chemin,int taille_chemin, int sommet)
+{
+	int i;
+	for(i=taille_chemin-1;i>=0;i--) //On part de la fin car plus de chances de retrouver le sommet en fin de tableau dans notre utilisation
+	{
+		if(chemin[i]==sommet){return 1;}
+	}
+	return 0;
+}
+
+
+
+
+
+
+
+
+/******************************************************************************************************************************************************************
+LES FONCTIONS CI-DESSOUS NE SONT PAS UTILISES, MAIS OFFRENT UNE AUTRE MANIERE DE CALCULER LES COUVERTURES,
+A BASE DE FILTRES APPLIQUES SUR LA COUVERTURE DES CHEMINS ELEMENTAIRES
+*******************************************************************************************************************************************************************
 
 
 
@@ -363,8 +385,8 @@ int compare_sommets(int * chemin1, int taille1, int * chemin2, int taille2)
 	return resultat;
 }
 
-//Retourne ue couverture des sommets (utilise un filtre de la couverture des chemins
-/*struct liste_chemin* couverture_sommets(liste_sommet* graphe,int *chemin,int taille_chemin, int long_total, int sommet_suivant)
+//Retourne ue couverture des sommets (utilise un filtre de la couverture des chemins en supprimant les chemins inclus les uns dans les autres)
+struct liste_chemin* couverture_sommets(liste_sommet* graphe,int *chemin,int taille_chemin, int long_total, int sommet_suivant)
 {
 	struct liste_chemin* debut=couverture_chemins(graphe,chemin,taille_chemin, long_total, sommet_suivant); //ON récupère l'ensemble des chemins possibles
 	struct liste_chemin* parcour1=debut->suivant; //On place un curseur sur le second chemin
@@ -403,15 +425,9 @@ int compare_sommets(int * chemin1, int taille1, int * chemin2, int taille2)
 		parcour1=parcour1->suivant;
 	}
 	return debut;
-}*/
-
-//Algorithme de recherche d'un entier dans un tableau d'entier
-int recherche_sommet_chemin(int * chemin,int taille_chemin, int sommet)
-{
-	int i;
-	for(i=taille_chemin-1;i>=0;i--) //On part de la fin car plus de chances de retrouver le sommet en fin de tableau
-	{
-		if(chemin[i]==sommet){return 1;}
-	}
-	return 0;
 }
+
+
+****************************************************************
+FIN
+*/

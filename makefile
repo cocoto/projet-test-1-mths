@@ -1,3 +1,3 @@
 CFLAGS=
 main:
-	@gcc *.c -o test $(CFLAGS)
+	@gcc *.c -o programme $(CFLAGS)
