@@ -27,6 +27,40 @@ linkcolor= blue,%couleur des liens internes
 	
 	
 	\section{Introduction}
+	Le but de ce projet est de fournir un logiciel capable de donner et d'évaluer le graphe de contrôle d'un programme écrit dans un pseudo langage ``simple''. Pour cela on met en place une interface très simple : on affiche un menu à choix multiple numéroté, le numéro choisi par l'utilisateur passe dans un ``switch'' qui execute les différentes actions correspondantes. On utilise un flag pour verifier qu'un fichier est bien en cours d'analyse pour éviter les erreurs.
+
+	Pour la création du graphe en lui-même, nous avons  choisi une liste chainée. Chaque cellule contient :
+	\begin{itemize}
+		\item un sommet numéroté
+		\item une étiquette (qui peut etre vide)
+		\item la liste chainée des arêtes qui partent de ce sommet
+		\item le lien vers la cellule suivante
+	\end{itemize}
+	Une cellule d'arête contient : 
+	\begin{itemize}
+		\item le numéro du sommet d'arrivée 
+		\item une étiquette (normalement l'instruction permettant de passer par l'arête)
+		\item la cellule arête suivante
+	\end{itemize}
+	
+	L'utilisation d'une liste chainée de liste chainée permet de simplifier la manipulation de la mémoire tout en gardant une forte coherence des données, chaque liste d'arêtes étant attachée à son sommet d'origine. On dispose de fonctions pour ajouter des sommets et des arêtes, rechercher un sommet dans la liste, et enfin une fonction d'affichage du graphe.
+	\subsection{Les fonctions d'ajout}
+		L'ajout d'un sommet prend simplement le numéro et l'étiquette du sommet à créer ainsi que la liste à laquelle l'ajouter. On crée alors une nouvelle cellule et on l'ajoute en fin de liste, sauf pour une liste vide où elle devient la seule et unique cellule de la liste. En effet, l'utilisation par notre programme fait que jamais on ne créera deux sommets de même numéro et que les sommets sont créés en suivant une incrémentation régulière. Ainsi la liste proposera les sommets dans l'ordre de numérotation\footnote{qui pourra être différent de l'ordre d'éxecution, surtout dans les programmes contenant des conditionnelles.}
+
+		L'ajout d'une arête passe par une fonction intermediaire. En apparence, on appelle \textbf{ajouter\_arete} avec pour arguments l'etiquette, le sommet de départ, le sommet d'arrivée et la liste de sommets. En fait, cette fonction n'est qu'un ``masque'' qui appelle \textbf{ajouter\_arete\_l} avec comme arguments : 
+		\begin{itemize}
+			\item l'etiquette
+			\item la cellule du sommet de départ, donnée par \textit{recherche\_sommet(sommet\_d, liste)}
+			\item le sommet d'arrivée
+		\end{itemize}
+		L'ajout se fait ensuite de façon standard, on crée une nouvelle cellule arête et on l'ajoute en tête de la liste d'arete.
+	\subsection{Les fonctions de recherche et d'affichage}
+		Ces deux fonctions reposent sur le même principe, on crée un clone de la liste que l'on parcours ensuite.
+
+ Dans le cas de la recherche, on s'arrête dès que l'on trouve le sommet recherché ou que l'on est arrivé à la fin de la liste. Si on a effectivement trouvé on renvoie la cellule du sommet, sinon on ajoute le sommet à la liste et on rappelle la fonction à nouveau. Une utilisation normale n'appellera jamais de sommet inconnu mais nous avons fais ce choix afin d'eviter un blocage du programme en cas d'erreur.
+
+	Dans le cas de l'affichage, le parcours se fait systematiquement jusqu'à la fin. Pour chaque sommet, on affiche sont numéro et son étiquette, puis on parcours sa liste d'arête de la même manière que la liste de sommet. A chaque arête, on affiche l'etiquette et le sommet d'arrivée, puis on passe à l'arête suivante. Quand la liste est finie, on passe au sommet suivant.
+
 	\section{Ouverture et parsing}
 	\section{Analyse du graphe}
 	\section{Pour aller plus loin}
