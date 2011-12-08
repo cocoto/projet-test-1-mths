@@ -66,7 +66,7 @@ int parse(char *nomfichier,liste_sommet *graphe)
 		}
 		else if(strcmp(motlu,"Fsi")==0) //si nous tombons sur une conditionnelle
 		{	
-			ajouter_sommet(nbsommet+1,graphe,""); //On crée la branche "Vraie"
+			ajouter_sommet(nbsommet+1,graphe,"");
 			nbsommet++;
 			
 			//Si l'on est pas passé par un "sinon", l'étiquette doit porter la mention "faux"

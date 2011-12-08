@@ -8,7 +8,7 @@
 \usepackage{hyperref} % Créer des liens et des signets 
 \usepackage[babel=true]{csquotes} %permet les quotations (guillemets)
 \usepackage{graphicx} %Importation d'image
-
+\lstset{language=C}
 % Informations du rapport
 \title {Rapport \\ Travaux Pratiques Réseaux (Ethernet)}
 \author {Quentin Tonneau - Adrien Lardenois}
@@ -62,6 +62,37 @@ linkcolor= blue,%couleur des liens internes
 	Dans le cas de l'affichage, le parcours se fait systematiquement jusqu'à la fin. Pour chaque sommet, on affiche sont numéro et son étiquette, puis on parcours sa liste d'arête de la même manière que la liste de sommet. A chaque arête, on affiche l'etiquette et le sommet d'arrivée, puis on passe à l'arête suivante. Quand la liste est finie, on passe au sommet suivant.
 
 	\section{Ouverture et parsing}
+		\textit{On considère dans la suite de ce rapport que le fichier d'entrée contient uniquement le programme, correctement syntaxifié.}
+		
+		Le code d'ouverture et de parsing du fichier se trouve dans les fichiers ``parser.c'' et ``parser.h''.
+		\subsection{Ouverture du fichier}
+		Le code permettant la lecture du fichier est simple, et commun à la plupart des applications réalisées en C. On note au passage que l'ouverture se fait en mode ``lecture'' uniquement.
+		\begin{lstlisting}
+FILE* fichier=NULL;
+fichier=fopen(nomfichier,"r");
+if(fichier==NULL)
+{
+	return 0; //on quitte le programme avec une erreur
+}
+		\end{lstlisting}
+		\subsection{Parsing du fichier}
+		L'algorithme repose sur une série de variable définies de la façon suivante :
+		\begin{itemize}
+		\item motlut : variable contenant le mot en cour de traitement (max. 50 caractères)
+		\item instruction : concaténation des mots lus jusqu'à ``;''
+		\item sommetactuel : numéro du dernier sommet créé
+		\item nbsommet : nombre de sommet jusqu'à présent créés
+		\end{itemize}
+		Le parsing s'effectue à l'aide de la fonction fscanf, qui récupère un à un les mots contenus dans le fichier.
+		\subsubsection{Cas général}
+		Dans un fonctionnement général, c'est à dire un enchainement d'instructions sans conditionelle, l'algorithme concatène les mots lus jusqu'au symbole ';', puis crée une arête à l'aide de \textbf{ajouter\_sommet(nbsommet+1,graphe,"")} (sommet d'arrivée) puis \textbf{ajouter\_arete(instruction,sommetactuel,nbsommet,graphe)} dans laquelle nbsommet correspond au numéro du sommet tout juste créé.
+		\subsubsection{Traitement des conditionnelles}
+		Lorsque le programme rencontre le mot \textbf{Si}, il concatène l'ensemble des informations suivantes jusqu'au mot \textbf{Alors} dans une variable crée un sommet portant pour étiquette la chaîne précédement générée, le relie au graphique à l'aide d'une branche vierge.
+		
+		Il est important de décrire la manière dont les conditionelles sont traitées :\\
+		L'algorithme possède un tableau d'entiers dans lequel on peut placer un numéro de sommet dont on nécéssite de conserver sa place. Le schéma suivant montre comment sont traitées les conditionelles :
+		\begin{center}\includegraphics[width=15cm,height=15cm]{dessin.pdf}\end{center}
+	On voit que le traitement du Fsi et du Ftantque (Rouge ou vert) est presque identique. Le programme récupère dans le tableau le sommet sauvegardé, créer un chemin vers (resp. depuis) ce dernier depuis (resp. vers) le dernier sommet créé, et continu le parsing. On remarque que quelque soit le type de conditionnelle, on utilise toujours une seule case de notre \textit{Tableau de sauvegarde}, et l'algorithme utilise toujours la dernière case de ce dernier. Ainsi, en cas d'imbrication de conditionnelles, le programme utilisera les cases suivantes, et les détruiras à la fin des traitements. Ainsi, en limitant à 50 la taille de notre tableau, nous limitons le nombre d'imbrication \textbf{maximum} à 50.
 	\section{Analyse du graphe}
 	\section{Pour aller plus loin}
 	\section{Conclusion}
