@@ -10,7 +10,7 @@
 \usepackage{graphicx} %Importation d'image
 \lstset{language=C}
 % Informations du rapport
-\title {Rapport \\ Travaux Pratiques Etudes des Algorithmes \\ Évaluation dynamique de programme}
+\title {Rapport \\ Travaux Pratiques Étude des Algorithmes \\ Évaluation dynamique de programme}
 \author {Quentin Tonneau - Adrien Lardenois}
 \date{}
 %Propriétés des liens
@@ -28,7 +28,7 @@ linkcolor= blue,%couleur des liens internes
 	
 	\section{Introduction}
 	Le but de ce projet est de fournir un logiciel capable de donner et d'évaluer le graphe de contrôle d'un programme écrit dans un pseudo langage ``simple''. Pour cela on met en place une interface très simple : on affiche un menu à choix multiple numéroté, le numéro choisi par l'utilisateur passe dans un ``switch'' qui exécute les différentes actions correspondantes. On utilise un flag pour vérifier qu'un fichier est bien en cours d'analyse pour éviter les erreurs.
-
+	\subsection{Structures choisies}
 	Pour la création du graphe en lui-même, nous avons  choisi une liste chaînée. Chaque cellule contient :
 	\begin{itemize}
 		\item un sommet numéroté
@@ -62,7 +62,7 @@ linkcolor= blue,%couleur des liens internes
 	Dans le cas de l'affichage, le parcours se fait systématiquement jusqu'à la fin. Pour chaque sommet, on affiche sont numéro et son étiquette, puis on parcourt sa liste d'arête de la même manière que la liste de sommet. A chaque arête, on affiche l'étiquette et le sommet d'arrivée, puis on passe à l'arête suivante. Quand la liste est finie, on passe au sommet suivant.
 
 	\section{Ouverture et parsing}
-		\textit{On considère dans la suite de ce rapport que le fichier d'entrée contient uniquement le programme, correctement syntaxifié.}
+		\textit{On considère dans la suite de ce rapport que le fichier d'entrée contient uniquement le programme, syntaxiquement correct.}
 		
 		Le code d'ouverture et de parsing du fichier se trouve dans les fichiers ``parser.c'' et ``parser.h''.
 		\subsection{Ouverture du fichier}
@@ -96,11 +96,11 @@ if(fichier==NULL)
 	On remarque que quelque soit le type de conditionnelle, on utilise toujours une seule case de notre \textit{Tableau de sauvegarde}. En cas d'imbrication de conditionnelles, le programme utilisera les cases suivantes, et les détruiras à la fin des traitements. Ainsi, en limitant à 50 la taille de notre tableau, nous limitons le nombre d'imbrication \textbf{maximum} à 50, ce qui est déjà une limite très grande. Un simple jeu de ré-allocation permettrait en outre de fournir une limite quasi infinie.
 	\section{Analyse du graphe}
 	\subsection{Mesure de McCabe}
-		On utilise 2 compteurs, un pour les sommets un pour les arcs. On parcourt l'ensemble du graphe comme vu en \ref{parcourir} , mais cette fois on incremente le compteur de sommet pour chaque cellule\_sommet et celui des arcs pour chaque cellule\_arête. En fin de graphe, on calcule et on retourne la mesure de McCabe $= Nb_{Aretes} - Nb_{Sommets} + 2$.
+		On utilise 2 compteurs, un pour les sommets un pour les arcs. On parcourt l'ensemble du graphe comme vu en \ref{parcourir} , mais cette fois on incrémente le compteur de sommet pour chaque cellule\_sommet et celui des arcs pour chaque cellule\_arête. En fin de graphe, on calcule et on retourne la mesure de McCabe $= Nb_{Aretes} - Nb_{Sommets} + 2$.
 	\subsection{Couverture des chemins}
 		La couverture des chemins prend un graphe , le chemin à remplir, la taille du chemin au moment de l'appel, la taille maximale du tableau dans lequel est gardé le chemin, et le prochain sommet à analyser. Au premier appel, le chemin donné sera vide donc de taille 0 et le prochain sommet sera le tout premier, mais lors d'appels récursifs on sera amené à fournir des chemins déjà partiellement remplis.
 
-		La fonction parcourt le graphe, pour chaque cellule sommet :
+		La fonction parcourt le graphe, pour chaque cellule sommet on teste :
 	\begin{itemize}
 	\item Si la cellule suivante est NULL, on arrive à la fin d'un chemin
 		\begin{itemize}
@@ -108,7 +108,7 @@ if(fichier==NULL)
 		\item on crée une liste de chemin vide
 		\item on ajoute le chemin à la liste
 		\end{itemize}
-	\item Sinon si la cellule a plus d'une arête dans sa liste, on est sur une conditionnelle : on verifie si le sommet appartient déjà au chemin
+	\item Sinon si la cellule a plus d'une arête dans sa liste, on est sur une conditionnelle : on vérifie si le sommet appartient déjà au chemin
 			\begin{itemize}
 			\item si oui, on a une boucle, donc un tant que par lequel nous sommes déjà passés
 				\begin{itemize}
@@ -117,13 +117,13 @@ if(fichier==NULL)
 				\end{itemize}
 			\item sinon, nous avons une conditionnelle traversée pour la première fois :
 				\begin{itemize}
-				\item on duplique la liste resultat
+				\item on duplique la liste résultat
 				\item on ajoute le sommet
 				\item on duplique le chemin
-				\item on défini les listes de chemins par l'appel recursif de la fonction pour le chemin déjà rempli avec comme suivant :
+				\item on défini les listes de chemins par l'appel récursif de la fonction pour le chemin déjà rempli avec comme suivant :
 					\begin{itemize}
 					\item le point d'arrivé du premier arc
-					\item le point d'arrivé de l'arc suivant\footnote{Etant donné la structure des programmes il ne peut pas y avoir plus de 2 arcs.}
+					\item le point d'arrivé de l'arc suivant\footnote{Étant donné la structure des programmes il ne peut pas y avoir plus de 2 arcs.}
 					\end{itemize}
 				\item on ajoute la seconde liste à la fin de la première liste afin de regrouper tous les chemins
 				\end{itemize}
@@ -134,18 +134,36 @@ if(fichier==NULL)
 			\item on saute au sommet correspondant à l'arrivée de l'arête
 			\end{itemize}
 		\end{itemize}
+		\subsection{Couverture des sommets}
+			La Couverture des sommets fonctionne sur le même principe que la couverture des chemins, à la différence que lorsque l'on rencontre une conditionnelle, on vérifie son étiquette. En effet les Tantque et les Si ne sont pas traités de la même façon.
+
+			Dans le cas d'un Tantque, on cherche d'abord tous les chemins possible dans la boucle, on les concatène et enfin on poursuit dans l'autre branche. En effet, pour la couverture des sommets on ne cherche pas tous les chemins possibles mais les chemins nécessaires pour couvrir la totalité des sommets. On cherche donc les chemins les plus longs possibles.
+
+			Dans le cas d'un Si, si il n'y a pas de sinon, on ignore la branche faux car elle n'apporte aucun sommets. Si il y a un Sinon on crée 2 branches.
+		\subsection{Couverture des arêtes}
+			La couverture des arêtes fonctionne exactement comme la couverture des sommets, à ceci près que l'on ignore pas la branche faux du si car elle apporte bien un arc au graphe.
+		\subsection{Affichage des couvertures}
+			L'affichage se fait par un simple parcours de la liste, avec un affichage de chaque case du chemin de la cellule.
 	\section{Pour aller plus loin}
-	Il nous était demandé également de réaliser un algorithme de génération de jeux de test. N'ayant pas une définition éxacte de la syntaxe et des possibilités du langage de programmation, il nous est impossible de réellement générer des jeux de test sous la forme $\{x=4,y=\frac{6}{3}\}, $. Nous avons donc pensé prendre les étiquettes de chacunes de nos conditionnelles dans le cadre de la couverture des instructions, et les relier par un symbole \textbf{\&}. Ensuite, la négation de ces expressions aurait put nous donner une couverture complète du programme par jeux de test. Par exemple $\{a<3\ \&\ a>c\ \&\ c=2\}$. Cette solution, facile à mettre en place, possède malheureusement des lacunes :
+	Il nous était demandé également de réaliser un algorithme de génération de jeux de test. N'ayant pas une définition exacte de la syntaxe et des possibilités du langage de programmation, il nous est impossible de réellement générer des jeux de test sous la forme $\{x=4,y=\frac{6}{3}\}, $. Nous avons donc pensé prendre les étiquettes de chacune de nos conditionnelles dans le cadre de la couverture des instructions, et les relier par un symbole \textbf{\&}. Ensuite, la négation de ces expressions aurait pu nous donner une couverture complète du programme par jeux de test. Par exemple $\{a<3\ \&\ a>c\ \&\ c=2\}$. Cette solution, facile à mettre en place, possède malheureusement des lacunes :
 	\begin{itemize}
-	\item Impossible de vérifier les incohérences dans les conditionelles ($a<b$ et $b<a$)
+	\item Impossible de vérifier les incohérences dans les conditionnelles ($a<b$ et $b<a$)
 	\item Difficultés à réaliser les inverses de ces expressions (traitement du langage)
-	\item Impossibilité de traiter les boucles Tantque, car les variables changent au cours du parcourt, et la variable d'entrée est l'inverse de celle de sortie
+	\item Impossibilité de traiter les boucles Tantque, car les variables changent au cours du parcours, et la variable d'entrée est l'inverse de celle de sortie
 	\end{itemize}
-	Devant le grand nombre de problèmes issue d'un tel processus, nous n'avons pas souhaité creer l'algorithme associé.
+	Devant le grand nombre de problèmes issue d'un tel processus, nous n'avons pas souhaité créer l'algorithme associé.
 	
-	Nous aurions put également afficher la liste des programmes présents dans le répertoire d'execution et proposer à l'utilisateur d'en choisir un, mais tout comme l'organisation d'un projet, les sources sont généralement réparties dans différents répertoires, aussi il est plus simple de rentrer le chemin du fichier au clavier.
+	Nous aurions pu également afficher la liste des programmes présents dans le répertoire d'exécution et proposer à l'utilisateur d'en choisir un, mais tout comme l'organisation d'un projet, les sources sont généralement réparties dans différents répertoires, aussi il est plus simple de rentrer le chemin du fichier au clavier.
+
+	Pour pouvoir générer des jeux de tests, la plupart des variables étant amenées à changer au cours du programme,  il serait nécessaire d'implémenter un système de backtracking pour vérifier que les jeux de test permettront la complétion du programme.
 	\section{Conclusion}
-	\subsection{Bilan des expériences}
-		Ce projet nous a permis de mettre en pratique les connaissances acquises en début de semestre (graphs et couvertures), d'approfondir notre maîtise des listes chainées, fonctions récursives, allocation dynamique en C. Nous regrettons de n'avoir pu utiliser le langage C++, nottemment dans la gestion des chaînes de caractères et des structures (programmation orientée objet).
-	 \subsection{Surement un truc super utile mais je vois pas}
+		Ce projet nous a permis de mettre en pratique les connaissances acquises en début de semestre (graphes et couvertures), d'approfondir notre maîtrise des listes chainées, fonctions récursives, allocation dynamique en C. Nous regrettons de n'avoir pu utiliser le langage C++, notamment dans la gestion des chaînes de caractères et des structures (programmation orientée objet).
+		
+
+
+L'ensemble du projet est fonctionnel sous l'environnement suivant : Ubuntu 11.10 X64 et gcc v.4.6.1. La plupart des programmes ne fonctionnent pas sur les ordinateurs de la faculté, probablement par manque de mémoire vive et système d'exploitation équivalent.
+		
+	Finalement nous avons pu fournir un programme globalement fonctionnel, mais il nous aurai fallu plus de temps pour pouvoir mettre en place les couvertures et jeux de tests manquants.
+
+		
 \end{document}
