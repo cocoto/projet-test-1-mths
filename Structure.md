@@ -1,0 +1,21 @@
+Le graphe est stocké sous forme d'un tableau unidimensionnel.
+
+L'indice du tableau est un sommet.
+
+dans la case on a une liste chainée sous forme de triplets (etiquette, point d'arrivée de l'arc, pointeur)
+
+pour sauvegarder l'imbrication on utilise deux tableaux ( un pour les tant que et un autre pour les si)
+
+a la lecture du si on stocke le sommet
+
+- si lecture d'un sinon on remplace le sommet par celui ou l'on etait
+
+a la lecture du finsi on relie le sommet ou l'on est au suivant et celui du tableau au suivant aussi.
+
+
+a la lecture d'un tant que : on stocke le sommet
+
+arrivé au fintantque : on relie de l'actuel vers le stocké on repart du stocké et on créé un nouvel etat
+
+
+On aurai pu se passer du numero de sommet en considerant uniquement leur place dans la liste.
